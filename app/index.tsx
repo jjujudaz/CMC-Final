@@ -1,29 +1,18 @@
 import { useEffect, useState } from "react";
 import { View, Text, Image, TextInput, Button } from "react-native";
 import {app} from "./firebase/firebse_initialize";
-import {createUser} from './firebase/createUser'
+import { useRouter } from "expo-router";
  
 export default function HomeScreen() {
-
-  const [email, setEmail] = useState<String>('')
-  const [pwd, setPwd] = useState<String>('')
-  const [message, setMessage] = useState<String>('')
+  const router = useRouter()
   useEffect(() => {
       if(app){
-        console.log("firebased init")
+        setTimeout(() => {
+          router.replace('/register')
+        }, 2000)
       }
 
   }, []);
-
-
-  async function handleForm() {
-    const result = await createUser(email, pwd);
-    if(result !== "successful"){
-      setMessage(result)
-    }
-
-}
-
   return (
     <View
       style={{
@@ -34,13 +23,9 @@ export default function HomeScreen() {
       }}
     >
       <Image
-        source={require("./icon.png")}
+        source={require("../assets/images/icon.png")}
         style={{ width: 300, height: 300 }}
       />
-      <TextInput placeholder="Email" onChangeText={(email) => setEmail(email)}/>
-      <TextInput placeholder="Password" onChangeText={(pwd) => setPwd(pwd)}/>
-      <Text>{message}</Text>
-      <Button onPress={handleForm} title="Submit" />
       <Text style={{ color: "#fff", fontSize: 30 }}>Coffee Meets Careers</Text>
     </View>
   );
