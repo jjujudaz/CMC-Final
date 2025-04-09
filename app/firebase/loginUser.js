@@ -1,6 +1,6 @@
 import {getAuth, signInWithEmailAndPassword} from 'firebase/auth'
 
-export async function loginUser(email, pwd){
+export default async function loginUser(email, pwd){
     const auth = getAuth()
     try {
         //signed in

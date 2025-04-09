@@ -1,18 +1,29 @@
-import { useEffect, useState } from "react";
-import { View, Text, Image, TextInput, Button } from "react-native";
-import {app} from "./firebase/firebse_initialize";
-import { useRouter } from "expo-router";
- 
-export default function HomeScreen() {
-  const router = useRouter()
-  useEffect(() => {
-      if(app){
-        setTimeout(() => {
-          router.replace('/register')
-        }, 2000)
-      }
+import { useEffect } from "react";
+import { View, Text, Image } from "react-native";
+import { firebaseConfig } from "./firebase/firebse_initialize";
+import { initializeApp } from "firebase/app";
+import { getDatabase, set, ref } from "firebase/database";
+import { router } from "expo-router";
 
+export default function HomeScreen() {
+  useEffect(() => {
+    // Initialize Firebase App
+    const app = initializeApp(firebaseConfig);
+
+    // Initialize Firebase Database
+    const database = getDatabase(app);
+
+    console.log("Firebase App Initialized:", app.name);
+    console.log("Database Initialized:", database);
+
+    // Example: Navigate to home after initialization
+    setTimeout(() => {
+      router.push('/home')
+    }, 2000);
   }, []);
+
+
+ 
   return (
     <View
       style={{

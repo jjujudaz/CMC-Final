@@ -1,6 +1,6 @@
 import { getAuth, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 
-export async function createUser(email, password, name) {
+export default async function createUser(email, password, name) {
     const auth = getAuth();
     try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password)
