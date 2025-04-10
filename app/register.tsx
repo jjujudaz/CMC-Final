@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { View, Text, Image, TextInput, Button } from "react-native";
 import {app} from "./firebase/firebse_initialize";
-import {createUser} from './firebase/createUser'
+import createUser from './firebase/createUser'
 import { useRouter } from "expo-router";
  
 export default function RegisterScreen() {

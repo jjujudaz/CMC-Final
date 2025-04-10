@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { View, Text, Image, TextInput, Button } from "react-native";
-import {loginUser} from './firebase/loginUser'
+import loginUser from './firebase/loginUser'
 import { useRouter } from "expo-router";
  
 export default function RegisterScreen() {
@@ -15,7 +15,13 @@ export default function RegisterScreen() {
   async function handleForm() {
     const result = await loginUser(email, pwd);
     if(typeof(result) == "boolean"){
-       router.navigate('/home')
+       router.navigate({
+        pathname: '/home',
+        params:{
+          email: email,
+          password: pwd
+        }
+       })
     }else {
         setMessage(result)
     }

@@ -1,19 +1,47 @@
 import { useEffect, useState } from 'react'
 import {View, Text, TextInput, Button, Alert} from 'react-native'
-import { getAuth } from 'firebase/auth'
 import { getDatabase, set, ref, onValue, update, push, child } from "firebase/database";
+import {getAuth, initializeAuth} from 'firebase/auth'
 import UserInfo from './firebase/getUserInfo'
-function HomeScreen(){
+import { useLocalSearchParams } from 'expo-router/build/hooks';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import { initializeApp } from 'firebase/app';
+import firebaseConfig from './firebase/firebse_initialize';
+// import getReactNativePersistence from "@react-native-firebase/auth"
+
+
+
+export default function HomeScreen(){
     const [welcomeMessage, setWelcomeMessage] = useState<String>('')
     const [textMessage, setTextMessage] = useState<string>('')
     const [messages, setMessages] = useState([])
+
+    const {email, password} = useLocalSearchParams()
+
+
     useEffect(() => {
         fetchUser()
+        async function initializeUser (){
+            const UserLoginCredentials = {
+                email: email,
+                pwd: password
+            }
+            try {
+                await AsyncStorage.setItem("USERCREDENTIALS", JSON.stringify(UserLoginCredentials))
+                console.log("user cred set")
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        initializeUser()
     }, [])
+
 
     async function fetchUser(){
         const auth = await getAuth()
-        console.log(auth.currentUser)
+        console.log("welcome: "+ auth.currentUser?.displayName)
         if(auth.currentUser?.displayName){
             setWelcomeMessage(auth.currentUser?.displayName)
         }
@@ -35,20 +63,20 @@ function HomeScreen(){
         })
     }
     async function sendMessage() {
-    //     const name = UserInfo()
-    //     console.log(name)
-    //    Alert.alert("AHAH")
+        if(!UserInfo()){
+            return
+        }
+        const {name, uid, photoUrl} = UserInfo()
        
         const db = getDatabase();
-        const userId = 123; // Replace with the actual user ID
-        const userName = "Yaser"; // Replace with the actual user name
         const newMsgKey = push(child(ref(db), 'users')).key; // Generate a unique key for the message
 
         // Construct the message object
         const newMessage = {
             id: newMsgKey,
-            userId: userId,
-            userName: userName,
+            userId: uid,
+            userName: name,
+            photoUrl: photoUrl,
             message: textMessage, // The message from the input field
             timestamp: Date.now(), // Add a timestamp
         };
@@ -73,7 +101,8 @@ function HomeScreen(){
                 <Button onPress={sendMessage} title='send'/>
                 {messages.map((item, index) => {
                     return(
-                        <View key={index}>
+                        <View key={index} style={{display: 'flex', flexDirection: 'row', gap: 10}}>
+                            <Text>{item.userName}: </Text>
                             <Text>{item.message}</Text>
                         </View>
                     )
@@ -81,5 +110,3 @@ function HomeScreen(){
         </View>
     )
 }
-
-export default HomeScreen
