@@ -15,7 +15,7 @@ export default function RegisterScreen() {
   async function handleForm() {
     const result = await loginUser(email, pwd);
     if(typeof(result) == "boolean"){
-       router.navigate({
+       router.replace({
         pathname: '/home',
         params:{
           email: email,
