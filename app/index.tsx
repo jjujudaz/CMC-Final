@@ -21,6 +21,10 @@ export default function HomeScreen() {
     console.log("Firebase App Initialized");
     console.log("Database Initialized");
 
+    // Example: Navigate to home after initialization
+    setTimeout(() => {
+      router.push('/register');
+    }, 2000);
     // Initialize user on app load
     initilizeUser();
   }, []);
@@ -48,10 +52,10 @@ export default function HomeScreen() {
           router.replace("/home");
         } else {
           console.log("No user found");
-          router.replace('/register')
+          router.replace('/home')
         }
       } else {
-        router.replace('/register')
+        router.replace('/home')
         console.log("No valid credentials received");
       }
     } catch (error) {
