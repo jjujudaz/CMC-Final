@@ -41,7 +41,6 @@ export default function RegisterScreen() {
     })
     if(!image.canceled){
      setImgUri(image.assets[0].uri)
-
     }
   } 
   return (
