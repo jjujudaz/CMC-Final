@@ -7,11 +7,7 @@ import * as ImagePicker from "expo-image-picker";
 import AWS from "aws-sdk";
 import SegmentedControl from "@react-native-segmented-control/segmented-control";
 
-AWS.config.update({
-  accessKeyId: "AKIAYWBJYMSD64NNFC4X", // Replace with your AWS key
-  secretAccessKey: "GeeEC2GO5xmnnt4i+XDXhieOtMBM3BfM1RvCfOsI", // Replace with your AWS secret
-  region: "ap-southeast-2", // Replace with your bucket's region
-});
+
 
 const s3 = new AWS.S3();
 

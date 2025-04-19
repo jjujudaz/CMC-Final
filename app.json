@@ -44,7 +44,10 @@
     },
     "extra": {
       "router": {
-        "origin": false
+        "origin": false,
+        "AWS_ACCESS_KEY_ID": "AKIAYWBJYMSD64NNFC4X",
+        "AWS_SECRET_ACCESS_KEY": "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",
+        "AWS_REGION": "ap-southeast-2"
       },
       "eas": {
         "projectId": "9a8d5fdf-814d-43f6-99fc-9cfb2d872d19"
