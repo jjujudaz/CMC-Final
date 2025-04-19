@@ -5,14 +5,14 @@ import createUser from "./firebase/createUser";
 import { useRouter } from "expo-router";
 import * as ImagePicker from "expo-image-picker";
 import AWS from "aws-sdk";
-
+import SegmentedControl from "@react-native-segmented-control/segmented-control";
 
 AWS.config.update({
-    accessKeyId: 'AKIAYWBJYMSD64NNFC4X', // Replace with your AWS key
-    secretAccessKey: 'GeeEC2GO5xmnnt4i+XDXhieOtMBM3BfM1RvCfOsI', // Replace with your AWS secret
-    region: 'ap-southeast-2', // Replace with your bucket's region
-  });
-  
+  accessKeyId: "AKIAYWBJYMSD64NNFC4X", // Replace with your AWS key
+  secretAccessKey: "GeeEC2GO5xmnnt4i+XDXhieOtMBM3BfM1RvCfOsI", // Replace with your AWS secret
+  region: "ap-southeast-2", // Replace with your bucket's region
+});
+
 const s3 = new AWS.S3();
 
 export default function RegisterScreen() {
@@ -22,6 +22,7 @@ export default function RegisterScreen() {
   const [message, setMessage] = useState<string>("");
   const [imgUri, setImgUri] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [userType, setUsertype] = useState(0);
   const router = useRouter();
 
   useEffect(() => {
@@ -111,10 +112,10 @@ export default function RegisterScreen() {
       setMessage("Please fill all fields");
       return;
     }
-  
+
     try {
       let imageUrl = null;
-  
+
       // If an image is selected, upload it first
       if (imgUri) {
         imageUrl = await uploadImage(imgUri);
@@ -123,23 +124,25 @@ export default function RegisterScreen() {
           return;
         }
       }
-  
+
       // Create the user with the imageUrl as a parameter
-      const errorMsg = await createUser(email, pwd, name, imageUrl);
+      const errorMsg = await createUser(email, pwd, name, imageUrl, userType);
       if (errorMsg !== "successful") {
         setMessage(errorMsg);
         return;
       }
-  
+
       // Navigate to home after successful registration
       setMessage("Registration successful!");
-      router.dismissTo('/home')
+      router.dismissTo("/home");
     } catch (error) {
       console.error("Registration error:", error);
       setMessage("Registration failed. Please try again.");
     }
   }
 
+
+  
   function navigaToLogin() {
     router.push("/login");
   }
@@ -183,7 +186,14 @@ export default function RegisterScreen() {
       </Text>
 
       <Button onPress={handleForm} title="Register" disabled={isUploading} />
-
+      <SegmentedControl
+        values={["Student", "Tutor"]}
+        backgroundColor="black"
+        selectedIndex={userType}
+        onChange={(event) => {
+          setUsertype(event.nativeEvent.selectedSegmentIndex); // Update the state with the selected index
+        }}
+      />
       <Button
         onPress={navigaToLogin}
         title="Already have an account? Login"
