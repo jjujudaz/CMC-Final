@@ -53,11 +53,11 @@ export default function HomeScreen() {
         } else {
           console.log("No user found");
           //later change to register
-          router.replace('/home')
+          router.replace('/register')
         }
       } else {
         //later change to register
-        router.replace('/home')
+        router.replace('/register')
         console.log("No valid credentials received");
       }
     } catch (error) {

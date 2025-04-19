@@ -1,16 +1,15 @@
 
 
 // Firebase configuration
-export const firebaseConfig = {
-  apiKey: "AIzaSyD4cByyZFB7mjDWTrJK0FQZ196Nupg1mtA",
-  authDomain: "cmc-db-9077c.firebaseapp.com",
-  projectId: "cmc-db-9077c",
-  storageBucket: "cmc-db-9077c.firebasestorage.app",
-  messagingSenderId: "1094053580566",
-  appId: "1:1094053580566:web:7da2f914ed36aa9d5c8a37",
-  measurementId: "G-V4J597CCKX",
-  databaseURL: 'https://cmc-db-9077c-default-rtdb.asia-southeast1.firebasedatabase.app'
-};
 
+export const firebaseConfig = {
+  apiKey: "AIzaSyC_3uNrdj_Ny_68fIlWLCxFXCIfYxW7KWM",
+  authDomain: "cmc-db-final.firebaseapp.com",
+  projectId: "cmc-db-final",
+  storageBucket: "cmc-db-final.firebasestorage.app",
+  messagingSenderId: "931051452635",
+  appId: "1:931051452635:web:53ba3e0194d3705530b4fe",
+  measurementId: "G-E8EH6HD13J"
+};
 export default firebaseConfig
 
