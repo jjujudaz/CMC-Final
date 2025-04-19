@@ -1,58 +1,194 @@
 import { useEffect, useState } from "react";
-import { View, Text, Image, TextInput, Button } from "react-native";
-import {app} from "./firebase/firebse_initialize";
-import createUser from './firebase/createUser'
+import { View, Text, Image, TextInput, Button, Alert } from "react-native";
+import { app } from "./firebase/firebse_initialize";
+import createUser from "./firebase/createUser";
 import { useRouter } from "expo-router";
- import * as ImagePicker from 'expo-image-picker'
+import * as ImagePicker from "expo-image-picker";
+import AWS from "aws-sdk";
+
+
+AWS.config.update({
+    accessKeyId: 'AKIAYWBJYMSD64NNFC4X', // Replace with your AWS key
+    secretAccessKey: 'GeeEC2GO5xmnnt4i+XDXhieOtMBM3BfM1RvCfOsI', // Replace with your AWS secret
+    region: 'ap-southeast-2', // Replace with your bucket's region
+  });
+  
+const s3 = new AWS.S3();
+
 export default function RegisterScreen() {
-  const [name, setName] = useState<String>('')
-  const [email, setEmail] = useState<String>('')
-  const [pwd, setPwd] = useState<String>('')
-  const [message, setMessage] = useState<String>('')
-  const [imgUri, setImgUri] = useState<String | null>(null)
-  //fetching router accessbility
-  const router = useRouter()
+  const [name, setName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [pwd, setPwd] = useState<string>("");
+  const [message, setMessage] = useState<string>("");
+  const [imgUri, setImgUri] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
-      if(app){
-        console.log("firebased initialised")
-      }
-
-  }, []);
-  //creating user on button click and if successful navigate to home otherwise show error message
-  async function handleForm() {
-    const errorMsg = await createUser(email, pwd, name);
-    if(errorMsg !== "successful"){
-      setMessage(errorMsg)
-      return
+    if (app) {
+      console.log("Firebase initialized");
     }
-    router.replace('/home')
-}
+  }, []);
 
-  function navigaToLogin(){
-    router.push('/login')
+  async function generateSignedUrl(fileName: string, fileType: string) {
+    const params = {
+      Bucket: "cmc-capstone-image", // Replace with your bucket name
+      Key: `profile-pictures/${fileName}`, // Store in profile-pictures folder
+      ContentType: fileType,
+      Expires: 60 * 5, // URL expires in 5 minutes
+    };
+
+    try {
+      const signedUrl = await s3.getSignedUrlPromise("putObject", params);
+      return signedUrl;
+    } catch (error) {
+      console.error("Error generating signed URL:", error);
+      throw error;
+    }
   }
 
-  async function pickImage(){
-    const image = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: 'images',
-      allowsEditing: true,
-      quality: 1
-    })
-    if(!image.canceled){
-     setImgUri(image.assets[0].uri)
+  async function pickImage() {
+    try {
+      const image = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 0.8,
+      });
+
+      if (!image.canceled) {
+        setImgUri(image.assets[0].uri); // Store the image URI locally
+        setMessage("Image selected successfully!");
+      }
+    } catch (error) {
+      console.error("Error picking image:", error);
+      setMessage("Failed to pick an image.");
     }
-  } 
+  }
+
+  async function uploadImage(imageUri: string) {
+    try {
+      setIsUploading(true);
+      setMessage("Uploading image...");
+
+      const imageExt = imageUri.split(".").pop();
+      const imageMime = `image/${imageExt}`;
+      const fileName = `user_${Date.now()}.${imageExt}`; // Unique filename
+
+      // Generate signed URL
+      const signedUrl = await generateSignedUrl(fileName, imageMime);
+
+      // Upload to S3
+      const response = await fetch(imageUri);
+      const blob = await response.blob();
+
+      const uploadResponse = await fetch(signedUrl, {
+        method: "PUT",
+        body: blob,
+        headers: {
+          "Content-Type": imageMime,
+        },
+      });
+
+      if (uploadResponse.ok) {
+        const imageUrl = signedUrl.split("?")[0]; // Get public URL without query params
+        setMessage("Image uploaded successfully!");
+        return imageUrl; // Return the URL to use in handleForm
+      } else {
+        throw new Error("Upload failed");
+      }
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      setMessage("Image upload failed");
+      return null;
+    } finally {
+      setIsUploading(false);
+    }
+  }
+
+  async function handleForm() {
+    if (!name || !email || !pwd) {
+      setMessage("Please fill all fields");
+      return;
+    }
+  
+    try {
+      let imageUrl = null;
+  
+      // If an image is selected, upload it first
+      if (imgUri) {
+        imageUrl = await uploadImage(imgUri);
+        if (!imageUrl) {
+          setMessage("Image upload failed. Please try again.");
+          return;
+        }
+      }
+  
+      // Create the user with the imageUrl as a parameter
+      const errorMsg = await createUser(email, pwd, name, imageUrl);
+      if (errorMsg !== "successful") {
+        setMessage(errorMsg);
+        return;
+      }
+  
+      // Navigate to home after successful registration
+      setMessage("Registration successful!");
+      router.dismissTo('/home')
+    } catch (error) {
+      console.error("Registration error:", error);
+      setMessage("Registration failed. Please try again.");
+    }
+  }
+
+  function navigaToLogin() {
+    router.push("/login");
+  }
+
   return (
-    <View>
-      <TextInput placeholder="Name" onChangeText={(name) => setName(name)}/>
-      <TextInput placeholder="Email" onChangeText={(email) => setEmail(email)}/>
-      <TextInput placeholder="Password" onChangeText={(pwd) => setPwd(pwd)}/>
-      <Button onPress={pickImage} title="Pick a profile picture" />
-      {imgUri && <Image source={{uri: imgUri}} style={{width: 200, height: 200}}/>}
-      <Text>{message}</Text>
-      <Button onPress={handleForm} title="Submit" />
-      <Button onPress={navigaToLogin} title="Already have an account?"/>
+    <View style={{ padding: 20 }}>
+      <TextInput
+        placeholder="Name"
+        onChangeText={setName}
+        style={{ marginBottom: 10, padding: 10, borderWidth: 1 }}
+      />
+      <TextInput
+        placeholder="Email"
+        onChangeText={setEmail}
+        keyboardType="email-address"
+        autoCapitalize="none"
+        style={{ marginBottom: 10, padding: 10, borderWidth: 1 }}
+      />
+      <TextInput
+        placeholder="Password"
+        onChangeText={setPwd}
+        secureTextEntry
+        style={{ marginBottom: 10, padding: 10, borderWidth: 1 }}
+      />
+
+      <Button
+        onPress={pickImage}
+        title={imgUri ? "Change profile picture" : "Pick a profile picture"}
+        disabled={isUploading}
+      />
+
+      {imgUri && (
+        <Image
+          source={{ uri: imgUri }}
+          style={{ width: 200, height: 200, alignSelf: "center", margin: 10 }}
+        />
+      )}
+
+      <Text style={{ color: "red", textAlign: "center", marginVertical: 10 }}>
+        {message}
+      </Text>
+
+      <Button onPress={handleForm} title="Register" disabled={isUploading} />
+
+      <Button
+        onPress={navigaToLogin}
+        title="Already have an account? Login"
+        color="gray"
+      />
     </View>
   );
 }

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { View, Text, TextInput, Button, Alert,ScrollView, FlatList } from "react-native";
+import { View, Text, TextInput, Button, Alert,ScrollView, FlatList, Image } from "react-native";
 import { getAuth } from "firebase/auth";
 import {
   getDatabase,
@@ -15,6 +15,7 @@ function HomeScreen() {
   const [welcomeMessage, setWelcomeMessage] = useState<String>("");
   const [textMessage, setTextMessage] = useState<string>("");
   const [messages, setMessages] = useState([]);
+  const [photoUrl, setPhotoUrl] = useState('')
   useEffect(() => {
     fetchUser();
   }, []);
@@ -22,8 +23,10 @@ function HomeScreen() {
   async function fetchUser() {
     const auth = await getAuth();
     console.log(auth.currentUser);
-    if (auth.currentUser?.displayName) {
+    if (auth.currentUser?.displayName && auth.currentUser.photoURL) {
       setWelcomeMessage(auth.currentUser?.displayName);
+      setPhotoUrl(auth.currentUser?.photoURL)
+      console.log(auth.currentUser.photoURL)
     }
   }
 
@@ -42,10 +45,6 @@ function HomeScreen() {
     });
   }
   async function sendMessage() {
-    //     const name = UserInfo()
-    //     console.log(name)
-    //    Alert.alert("AHAH")
-
     const db = getDatabase();
     const userId = 123; // Replace with the actual user ID
     const userName = "Yaser"; // Replace with the actual user name
@@ -77,7 +76,7 @@ function HomeScreen() {
       <ScrollView className="flex-1 px-5"
                   showsVerticalScrollIndicator={false} contentContainerStyle={{ minHeight: "100%", paddingBottom: 10 }}>
         <Text className="text-3xl font-bold font-Title text-black text-center pt-5">Coffee Meets Careers {welcomeMessage}</Text>
-
+        <Image style={{width: 200, height: 200}} source={{uri: photoUrl}} width={200} height={200}/>
         <View className={"flex-1 mt-5 mx-2.5"}>
           <View className={"flex-row items-center bg-gray-300 rounded-full px-5 py-5 border-2 border-primary"}>
             <TextInput
