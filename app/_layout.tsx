@@ -27,6 +27,7 @@ function RootLayout() {
       <Stack.Screen name="home" options={{ title: "Home" }} />
       <Stack.Screen name="login" options={{ title: "Login" }} />
       <Stack.Screen name="notifications" options={{ title: "Notifications" }} />
+      <Stack.Screen name="settings" options={{ title: "Settings" }} />
     </Stack>
   );
 }
