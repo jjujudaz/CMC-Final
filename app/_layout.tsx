@@ -7,7 +7,16 @@ function RootLayout() {
   const [loaded, error] = useFonts({
     "OpenSans-Regular": require("../assets/fonts/OpenSans-Regular.ttf"),
     "Roboto-Regular": require("../assets/fonts/Roboto-Regular.ttf"),
-    "Urbanist-Regular": require("../assets/fonts/Urbanist-Regular.ttf")
+    "Urbanist-Regular": require("../assets/fonts/Urbanist-Regular.ttf"),
+    "OpenSans-Bold": require("../assets/fonts/OpenSans-Bold.ttf"),
+    "Roboto-Bold": require("../assets/fonts/Roboto-Bold.ttf"),
+    "Urbanist-Bold": require("../assets/fonts/Urbanist-Bold.ttf"),
+    "OpenSans-Italic": require("../assets/fonts/OpenSans-Italic.ttf"),
+    "Roboto-Italic": require("../assets/fonts/Roboto-Italic.ttf"),
+    "Urbanist-Italic": require("../assets/fonts/Urbanist-Italic.ttf"),
+    "OpenSans-BoldItalic": require("../assets/fonts/OpenSans-BoldItalic.ttf"),
+    "Roboto-BoldItalic": require("../assets/fonts/Roboto-BoldItalic.ttf"),
+    "Urbanist-BoldItalic": require("../assets/fonts/Urbanist-BoldItalic.ttf"),
   });
 
   useEffect(() => {
@@ -28,6 +37,7 @@ function RootLayout() {
       <Stack.Screen name="login" options={{ title: "Login" }} />
       <Stack.Screen name="notifications" options={{ title: "Notifications" }} />
       <Stack.Screen name="settings" options={{ title: "Settings" }} />
+      <Stack.Screen name="findmentors" options={{ title: "Find Mentors" }} />
     </Stack>
   );
 }
