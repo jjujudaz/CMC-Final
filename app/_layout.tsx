@@ -1,4 +1,5 @@
 import { Stack } from "expo-router";
+import { useFonts } from "expo-font";
 import "./global.css";
 import { useFonts } from "expo-font";
 import { useEffect } from "react";
@@ -35,6 +36,7 @@ function RootLayout() {
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="home" options={{ title: "Home" }} />
       <Stack.Screen name="login" options={{ title: "Login" }} />
+      <Stack.Screen name="profile" options={{ title: "Profile" }} />
       <Stack.Screen name="notifications" options={{ title: "Notifications" }} />
       <Stack.Screen name="settings" options={{ title: "Settings" }} />
       <Stack.Screen name="findmentors" options={{ title: "Find Mentors" }} />
