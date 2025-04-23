@@ -1,7 +1,6 @@
 import { Stack } from "expo-router";
 import { useFonts } from "expo-font";
 import "./global.css";
-import { useFonts } from "expo-font";
 import { useEffect } from "react";
 
 function RootLayout() {
