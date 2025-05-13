@@ -8,9 +8,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 export default function HomeScreen() {
-
-
-
   useEffect(() => {
     // Initialize Firebase App
     const app = initializeApp(firebaseConfig);
@@ -18,13 +15,14 @@ export default function HomeScreen() {
     // Initialize Firebase Database
     getDatabase(app);
 
-    console.log("Firebase App Initialized");
+    console.log("Firebase App:" + app);
     console.log("Database Initialized");
 
-    // Example: Navigate to home after initialization
-    setTimeout(() => {
-      router.push('/cybermatch');
-    }, 2000);
+    // REMOVE this line:
+    // setTimeout(() => {
+    //   router.push('/register');
+    // }, 2000);
+
     // Initialize user on app load
     initilizeUser();
   }, []);
@@ -32,10 +30,12 @@ export default function HomeScreen() {
   // Function to initialize user
   async function initilizeUser() {
     const auth = getAuth();
-
+    console.log("Auth Initialized");
     try {
       const userCredentials = await fetchUser();
-
+      if(!userCredentials) {
+        router.replace("/login");
+      }
       // Check if userCredentials is valid
       if (userCredentials && userCredentials.email && userCredentials.pwd) {
         console.log("Received User Credentials:", userCredentials);
@@ -52,13 +52,9 @@ export default function HomeScreen() {
           router.replace("/home");
         } else {
           console.log("No user found");
-          //later change to register
-          router.replace('/home')
+          //later change to home
+          router.replace("/login");
         }
-      } else {
-        //later change to register
-        router.replace('/home')
-        console.log("No valid credentials received");
       }
     } catch (error) {
       console.error("Error during user initialization:", error.message);
