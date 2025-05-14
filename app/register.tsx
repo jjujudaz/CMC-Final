@@ -1,5 +1,14 @@
 import { useEffect, useState } from "react";
-import { View, Text, Image, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView, Platform } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  TextInput,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  ScrollView,
+  Platform,
+} from "react-native";
 import { app } from "./firebase/firebse_initialize";
 import createUser from "./firebase/createUser";
 import { useRouter } from "expo-router";
@@ -7,6 +16,7 @@ import * as ImagePicker from "expo-image-picker";
 import SegmentedControl from "@react-native-segmented-control/segmented-control";
 import Constants from "expo-constants";
 import AWS from "aws-sdk";
+import { getAuth } from "firebase/auth";
 
 export default function RegisterScreen() {
   const [name, setName] = useState<string>("");
@@ -16,12 +26,13 @@ export default function RegisterScreen() {
   const [imgUri, setImgUri] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [userType, setUsertype] = useState(0);
+  const [isWaitingForVerification, setIsWaitingForVerification] =
+    useState(false);
   const router = useRouter();
 
   useEffect(() => {
     if (app) {
       console.log("Firebase initialized");
-      
     }
   }, []);
 
@@ -31,24 +42,6 @@ export default function RegisterScreen() {
     secretAccessKey: Constants.expoConfig?.extra?.AWS_SECRET_ACCESS_KEY ?? "",
     region: Constants.expoConfig?.extra?.AWS_REGION ?? "",
   });
-
-  // 1. Get a pre-signed URL from AWS S3
-  async function getPresignedUrl(fileName: string, fileType: string) {
-    const params = {
-      Bucket: "cmc-capstone-image", // Replace with your S3 bucket name
-      Key: fileName, // File name (e.g., "user_12345.jpg")
-      Expires: 60, // URL expiration time in seconds
-      ContentType: fileType, // MIME type of the file
-    };
-
-    try {
-      const signedUrl = await s3.getSignedUrlPromise("putObject", params);
-      return signedUrl;
-    } catch (error) {
-      console.error("Error generating pre-signed URL:", error);
-      throw new Error("Failed to generate pre-signed URL");
-    }
-  }
 
   async function pickImage() {
     try {
@@ -69,47 +62,6 @@ export default function RegisterScreen() {
     }
   }
 
-  // 2. Upload the image to S3 using the pre-signed URL
-  async function uploadImage(imageUri: string) {
-    try {
-      setIsUploading(true);
-      setMessage("Uploading image...");
-
-      const imageExt = imageUri.split(".").pop() || "jpg";
-      const imageMime = `image/${imageExt}`;
-      const fileName = `user_${Date.now()}.${imageExt}`;
-
-      // Get pre-signed URL
-      const signedUrl = await getPresignedUrl(fileName, imageMime);
-
-      // Upload to S3
-      const response = await fetch(imageUri);
-      const blob = await response.blob();
-
-      const uploadResponse = await fetch(signedUrl, {
-        method: "PUT",
-        body: blob,
-        headers: {
-          "Content-Type": imageMime,
-        },
-      });
-
-      if (uploadResponse.ok) {
-        const imageUrl = signedUrl.split("?")[0];
-        setMessage("Image uploaded successfully!");
-        return imageUrl;
-      } else {
-        throw new Error("Upload failed");
-      }
-    } catch (error) {
-      console.error("Error uploading image:", error);
-      setMessage("Image upload failed");
-      return null;
-    } finally {
-      setIsUploading(false);
-    }
-  }
-
   async function handleForm() {
     if (!name || !email || !pwd) {
       setMessage("Please fill all fields");
@@ -127,18 +79,71 @@ export default function RegisterScreen() {
         }
       }
 
+      setIsWaitingForVerification(true); // Set waiting state
       const errorMsg = await createUser(email, pwd, name, imageUrl, userType);
+
       if (errorMsg !== "successful") {
-        setMessage(errorMsg);
+        // Handle Firebase error codes
+        console.error("Error creating user:1", errorMsg);
+        switch (errorMsg) {
+          case "Firebase: Error (auth/email-already-in-use).":
+            setMessage(
+              "This email is already in use. Please use a different email."
+            );
+            break;
+          case "Firebase: Error (auth/invalid-email).":
+            setMessage(
+              "The email address is not valid. Please enter a valid email."
+            );
+            break;
+          case "Firebase: Error (auth/weak-password).":
+            setMessage(
+              "The password is too weak. Please use a stronger password."
+            );
+            break;
+          case "Firebase: Error (auth/network-request-failed).":
+            setMessage(
+              "Network error. Please check your internet connection and try again."
+            );
+            break;
+          default:
+            setMessage("An unexpected error occurred. Please try again.");
+            break;
+        }
         console.error("Error creating user:", errorMsg);
+        setIsWaitingForVerification(false); // Reset waiting state
         return;
       }
 
-      setMessage("Registration successful!");
-      router.replace("/home");
+      setMessage("Registration successful! Please verify your email.");
     } catch (error) {
       console.error("Registration error:", error);
       setMessage("Registration failed. Please try again.");
+      setIsWaitingForVerification(false); // Reset waiting state
+    }
+  }
+
+  async function checkEmailVerification() {
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    if (!user) {
+      setMessage("No user is logged in.");
+      return;
+    }
+
+    try {
+      await user.reload(); // Reload user data
+      if (user.emailVerified) {
+        setMessage("Email verified! Redirecting...");
+        setIsWaitingForVerification(false);
+        router.replace("/home"); // Navigate to the home page
+      } else {
+        setMessage("Email not verified yet. Please check your inbox.");
+      }
+    } catch (error) {
+      console.error("Error checking email verification:", error);
+      setMessage("Failed to check email verification. Please try again.");
     }
   }
 
@@ -152,12 +157,17 @@ export default function RegisterScreen() {
       keyboardVerticalOffset={Platform.OS === "ios" ? 80 : 0}
       className="flex-1 bg-white"
     >
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
+      <ScrollView
+        contentContainerStyle={{ flexGrow: 1 }}
+        keyboardShouldPersistTaps="handled"
+      >
         <Text className="text-4xl font-bold font-Title text-black text-center pt-5 pb-8">
           Create New Account
         </Text>
         <View className="flex-row justify-center items-center pb-10">
-          <Text className="text-lg font-Menu text-center">Already registered?</Text>
+          <Text className="text-lg font-Menu text-center">
+            Already registered?
+          </Text>
           <TouchableOpacity onPress={navigaToLogin}>
             <Text className="text-lg font-semibold font-Menu text-center text-primary pl-1">
               Log in here
@@ -168,7 +178,9 @@ export default function RegisterScreen() {
           <SegmentedControl
             values={["Student", "Tutor"]}
             selectedIndex={userType}
-            onChange={(event) => setUsertype(event.nativeEvent.selectedSegmentIndex)}
+            onChange={(event) =>
+              setUsertype(event.nativeEvent.selectedSegmentIndex)
+            }
           />
         </View>
         <Text className="text-base font-bold font-Menu pl-11">Name</Text>
@@ -198,7 +210,7 @@ export default function RegisterScreen() {
             secureTextEntry
           />
         </View>
-        <View className="mb-8">
+        {/* <View className="mb-8">
           <TouchableOpacity
             onPress={pickImage}
             disabled={isUploading}
@@ -210,19 +222,37 @@ export default function RegisterScreen() {
               {imgUri ? "Change Profile Picture" : "Upload Profile Picture"}
             </Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
         {imgUri && (
-          <Image source={{ uri: imgUri }} className="w-48 h-48 rounded-full self-center my-2" />
+          <Image
+            source={{ uri: imgUri }}
+            className="w-48 h-48 rounded-full self-center my-2"
+          />
         )}
-        <Text className="text-center text-red-600 my-4 font-medium text-base">{message}</Text>
+        <Text className="text-center text-red-600 my-4 font-medium text-base">
+          {message}
+        </Text>
         <View className="mb-12">
-          <TouchableOpacity
-            onPress={handleForm}
-            disabled={isUploading}
-            className="flex-row bg-primary mx-10 px-4 rounded-lg h-14 items-center justify-center"
-          >
-            <Text className="text-2xl font-Menu text-white font-medium ">Sign Up</Text>
-          </TouchableOpacity>
+          {!isWaitingForVerification ? (
+            <TouchableOpacity
+              onPress={handleForm}
+              disabled={isUploading}
+              className="flex-row bg-primary mx-10 px-4 rounded-lg h-14 items-center justify-center"
+            >
+              <Text className="text-2xl font-Menu text-white font-medium ">
+                Sign Up
+              </Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              onPress={checkEmailVerification}
+              className="flex-row bg-blue-500 mx-10 px-4 rounded-lg h-14 items-center justify-center"
+            >
+              <Text className="text-2xl font-Menu text-white font-medium ">
+                Verify Email
+              </Text>
+            </TouchableOpacity>
+          )}
         </View>
       </ScrollView>
     </KeyboardAvoidingView>

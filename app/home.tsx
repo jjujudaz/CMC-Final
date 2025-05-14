@@ -222,7 +222,7 @@ function HomeScreen() {
             return (
               <View
                 key={index}
-                className="bg-white rounded-xl mb-4 mx-7 h-48 border border-stone-400"
+                className="bg-white rounded-xl mb-4 mx-7 border border-stone-400"
               >
                 <View
                 className="flex-row"
@@ -236,7 +236,7 @@ function HomeScreen() {
                 )}
 
                 <View
-                className=" flex-1 bg-stone-200 m-2 h-32 rounded-lg items-center"
+                className=" flex-1 bg-stone-200 m-2 rounded-lg items-center"
                 >
                   <Text
                   className="font-Menu font-semibold text-black p-3"
@@ -246,8 +246,7 @@ function HomeScreen() {
                   <Text
                       className="font-Text font-normal text-gray-700 pr-3 pl-3"
                   >
-                    Lorem ipsum dolo sit amet, consectetur adipiscing elit,
-                    sed do eiusmod tempr incididunt ut labore et dolore manga aliqua.
+                    {item.bio}
                   </Text>
                 </View>
                 </View>
