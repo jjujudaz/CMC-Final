@@ -1,5 +1,6 @@
 import { getAuth, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import {supabase} from '@/app/supabase/initiliaze'
+
 export default async function createUser(email, password, name, photoURL, userType) {
     const auth = getAuth();
     try {
@@ -18,6 +19,7 @@ export default async function createUser(email, password, name, photoURL, userTy
             user_type: userType == 0 ? "student" : 'tutor',
             photoURL: photoURL
         })
+        console.log(data)
         console.log(userType == 0 ? "student" : 'tutor')
 
         if(error){

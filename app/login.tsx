@@ -30,7 +30,7 @@ export default function RegisterScreen() {
 }
 
     function navigaToRegister() {
-        router.push("/register");
+        router.replace("/register");
     }
 
   return (
