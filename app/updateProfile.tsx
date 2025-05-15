@@ -25,6 +25,7 @@ export default function UpdateProfile() {
     const [session, setSession] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [uploading, setUploading] = useState(false);
+    const [imgUri, setImgUri] = useState<string | null>(null);
     const router = useRouter();
 
     // AWS S3 config
@@ -33,6 +34,7 @@ export default function UpdateProfile() {
         secretAccessKey: Constants.expoConfig?.extra?.AWS_SECRET_ACCESS_KEY ?? "",
         region: Constants.expoConfig?.extra?.AWS_REGION ?? "",
     });
+    const S3_BUCKET = Constants.expoConfig?.extra?.AWS_S3_BUCKET_NAME ?? "your-s3-bucket-name";
 
     // Fetch session and user data
     useEffect(() => {
@@ -73,8 +75,8 @@ export default function UpdateProfile() {
         fetchUser();
     }, [session]);
 
-    // Pick image and upload to S3, then update Supabase
-    const pickAndUploadImage = async () => {
+    // Pick image
+    async function pickImage() {
         try {
             const image = await ImagePicker.launchImageLibraryAsync({
                 mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -84,40 +86,77 @@ export default function UpdateProfile() {
             });
 
             if (!image.canceled) {
-                setUploading(true);
-                const uri = image.assets[0].uri;
-                const response = await fetch(uri);
-                const blob = await response.blob();
-                const fileName = `profile-images/${Date.now()}-${Math.random().toString(36).substring(7)}.jpg`;
+                setImgUri(image.assets[0].uri);
+            }
+        } catch (error) {
+            Alert.alert("Error", "Failed to pick an image.");
+        }
+    }
 
-                const params = {
-                    Bucket: Constants.expoConfig?.extra?.AWS_S3_BUCKET_NAME ?? "",
-                    Key: fileName,
-                    Body: blob,
-                    ContentType: blob.type,
-                    ACL: 'public-read',
-                };
+    // Upload image to S3 and update Supabase
+    async function uploadImage(uri: string): Promise<string | null> {
+        if (!S3_BUCKET || S3_BUCKET === "your-s3-bucket-name") {
+            Alert.alert("Error", "AWS S3 bucket is not configured.");
+            return null;
+        }
+        setUploading(true);
+        try {
+            const response = await fetch(uri);
+            const blob = await response.blob();
+            const fileName = `profile-images/${Date.now()}-${Math.random().toString(36).substring(7)}.jpg`;
 
-                const data = await s3.upload(params).promise();
-                // Update photoURL in Supabase
+            const params = {
+                Bucket: S3_BUCKET,
+                Key: fileName,
+                Body: blob,
+                ContentType: blob.type,
+                ACL: 'public-read',
+            };
+
+            const data = await s3.upload(params).promise();
+            return data.Location as string;
+        } catch (error) {
+            Alert.alert("Error", "Image upload failed.");
+            return null;
+        } finally {
+            setUploading(false);
+        }
+    }
+
+    // Handle avatar press
+    async function handleAvatarPress() {
+    try {
+        const image = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [1, 1],
+            quality: 0.8,
+        });
+
+        if (!image.canceled && image.assets && image.assets[0].uri) {
+            setImgUri(image.assets[0].uri); // for UI preview
+            setUploading(true);
+            const imageUrl = await uploadImage(image.assets[0].uri);
+            if (imageUrl && user) {
                 const { error } = await supabase
                     .from("users")
-                    .update({ photoURL: data.Location })
-                    .eq("email", user?.email);
+                    .update({ photoURL: imageUrl })
+                    .eq("email", user.email);
 
                 if (!error) {
-                    setUser(prev => prev ? { ...prev, photoURL: data.Location } : prev);
+                    setUser(prev => prev ? { ...prev, photoURL: imageUrl } : prev);
                     Alert.alert("Success", "Profile photo updated!");
                 } else {
                     Alert.alert("Error", "Failed to update profile photo.");
                 }
             }
-        } catch (err) {
-            Alert.alert("Error", "Image upload failed.");
-        } finally {
             setUploading(false);
         }
-    };
+    } catch (error) {
+        setUploading(false);
+        Alert.alert("Error", "Failed to pick or upload image.");
+    }
+}
 
     // Handle update
     const handleSubmit = async (email: string) => {
@@ -176,11 +215,11 @@ export default function UpdateProfile() {
                 className="bg-white"
             >
                 <View className="w-full p-6 items-center">
-                    <TouchableOpacity onPress={pickAndUploadImage} disabled={uploading}>
+                    <TouchableOpacity onPress={handleAvatarPress} disabled={uploading}>
                         <Image
                             style={styles.profileAvatar}
                             className="rounded-full border-2 border-gray-200"
-                            source={{ uri: user?.photoURL || 'https://avatar.iran.liara.run/public/41' }}
+                            source={{ uri: imgUri || user?.photoURL || 'https://avatar.iran.liara.run/public/41' }}
                         />
                         {uploading && (
                             <ActivityIndicator

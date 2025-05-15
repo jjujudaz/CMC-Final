@@ -36,6 +36,8 @@ function NotificationsScreen() {
         .eq("email", session.user.email)
         .single();
 
+      console.log("Fetched userData:", userData);
+
       if (userError || !userData?.id) {
         Alert.alert("Error", "Could not verify your user profile.");
         setIsLoading(false);
@@ -44,7 +46,8 @@ function NotificationsScreen() {
 
       setRole(userData.user_type);
 
-      if (userData.user_type === "Tutor") {
+      // Fix: make user_type check case-insensitive
+      if (userData.user_type.toLowerCase() === "tutor") {
         fetchMentorshipRequestsForTutor(userData.id);
       } else {
         fetchAcceptedMentorsForStudent(userData.id);
@@ -69,6 +72,8 @@ function NotificationsScreen() {
         `)
         .eq('tutor_id', tutorSupabaseId)
         .order('created_at', { ascending: false });
+
+      console.log("Fetched requests:", data);
 
       if (error) {
         Alert.alert("Error", `Could not load mentorship requests: ${error.message}`);
@@ -154,11 +159,11 @@ function NotificationsScreen() {
   return (
     <ScrollView className="flex-1 bg-gray-100">
       <Text style={{ fontFamily: "OpenSans-Regular" }} className="text-2xl font-bold ml-4 mt-6 mb-4">
-        {role === "Tutor" ? "Mentorship Requests" : "Your Accepted Mentors"}
+        {role && role.toLowerCase() === "tutor" ? "Mentorship Requests" : "Your Accepted Mentors"}
       </Text>
       {requests.length === 0 ? (
         <Text style={{ fontFamily: "OpenSans-Regular" }} className="text-center text-gray-500 mt-5">
-          {role === "Tutor"
+          {role && role.toLowerCase() === "tutor"
             ? "No mentorship requests found."
             : "No accepted mentors found."}
         </Text>
@@ -173,12 +178,12 @@ function NotificationsScreen() {
               />
               <View className="ml-4 flex-1">
                 <Text style={{ fontFamily: "OpenSans-Bold" }} className="text-base">
-                  {role === "Tutor"
+                  {role && role.toLowerCase() === "tutor"
                     ? `Student ID: ${request.student_id}`
                     : `Mentor ID: ${request.tutor_id}`}
                 </Text>
                 <Text style={{ fontFamily: "OpenSans-Regular" }} className="text-sm text-gray-600 mt-1">
-                  {role === "Tutor"
+                  {role && role.toLowerCase() === "tutor"
                     ? `Requested on: ${new Date(request.created_at).toLocaleDateString()}`
                     : `Accepted on: ${new Date(request.created_at).toLocaleDateString()}`}
                 </Text>
@@ -194,7 +199,7 @@ function NotificationsScreen() {
                 </Text>
               </View>
             </View>
-            {role === "Tutor" && request.status === 'pending' && (
+            {role && role.toLowerCase() === "tutor" && request.status === 'pending' && (
               <View className="flex-row justify-end mt-3 gap-x-3">
                 <Button
                   title="Decline"

@@ -77,7 +77,7 @@ export default function RegisterScreen() {
       const fileName = `profile-images/${Date.now()}-${Math.random().toString(36).substring(7)}.jpg`; // Unique filename
 
       const params = {
-        Bucket: Constants.expoConfig?.extra?.AWS_S3_BUCKET_NAME ?? "your-s3-bucket-name", // Ensure this is configured
+        Bucket: Constants.expoConfig?.extra?.AWS_S3_BUCKET_NAME ?? "ap-southeast-2", // Ensure this is configured
         Key: fileName,
         Body: blob,
         ContentType: blob.type, // e.g., 'image/jpeg'
