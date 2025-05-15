@@ -207,7 +207,7 @@ export default function RegisterScreen() {
             className="flex-1 text-base font-Text text-gray-800"
             placeholder="Password"
             onChangeText={setPwd}
-            secureTextEntry
+            secureTextEntry={true}
           />
         </View>
         {/* <View className="mb-8">

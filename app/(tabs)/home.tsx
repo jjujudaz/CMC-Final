@@ -10,7 +10,7 @@ import {
   child,
 } from "firebase/database";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import UserInfo from "./firebase/getUserInfo";
+import UserInfo from "../firebase/getUserInfo";
 import { supabase } from "@/app/supabase/initiliaze";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Feather from '@expo/vector-icons/Feather';

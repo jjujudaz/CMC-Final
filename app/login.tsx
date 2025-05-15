@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import {View, Text, Image, TextInput, Button, TouchableOpacity, KeyboardAvoidingView, ScrollView, Platform}
     from "react-native";
-import loginUser from './firebase/loginUser'
+import loginUser from './firebase/loginUser';
 import { useRouter } from "expo-router";
  
 export default function RegisterScreen() {
@@ -60,6 +60,7 @@ export default function RegisterScreen() {
             <View className="flex-row items-center bg-gray-200 mx-10 px-4 rounded-lg h-14 mb-20">
                 <TextInput
                     className="flex-1 text-base font-Text text-black"
+                    secureTextEntry={true}
                     placeholder="Password" onChangeText={(pwd) => setPwd(pwd)}
                 />
             </View>

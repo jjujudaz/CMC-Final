@@ -1,6 +1,6 @@
 import { Stack } from "expo-router";
 import { useFonts } from "expo-font";
-import "./global.css";
+import "./global.css"; // Assuming you have this file for global styles
 import { useEffect } from "react";
 
 function RootLayout() {
@@ -26,13 +26,19 @@ function RootLayout() {
   }, [loaded, error]);
 
   if (!loaded && !error) {
-    return null;
+    return null; // Or a loading indicator
   }
 
   return (
     <Stack>
+      {/* This screen will render the TabLayout from app/(tabs)/_layout.tsx */}
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+
+      {/* Other stack screens outside the tab navigator */}
+      {/* Ensure you have corresponding files like app/register.tsx, app/index.tsx (if not part of tabs), etc. */}
       <Stack.Screen name="register" options={{ title: "Register" }} />
-      <Stack.Screen name="index" options={{ headerShown: false }} />
+      {/* If your initial screen is part of the tabs, you might not need a separate app/index.tsx here */}
+      {/* <Stack.Screen name="index" options={{ headerShown: false }} /> */}
       <Stack.Screen name="home" options={{ title: "Home" }} />
       <Stack.Screen name="login" options={{ title: "Login" }} />
       <Stack.Screen name="profile" options={{ title: "Profile" }} />
