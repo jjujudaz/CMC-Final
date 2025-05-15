@@ -3,7 +3,7 @@ import { Tabs } from 'expo-router';
 
 export default function TabLayout() {
   return (
-    <Tabs screenOptions={{ tabBarActiveTintColor: 'blue' }}>
+    <Tabs screenOptions={{ tabBarActiveTintColor: 'blue', headerShown: false }}>
       <Tabs.Screen
         name="home" // This will look for a file at app/(tabs)/home.tsx or app/(tabs)/index.tsx
         options={{
@@ -27,10 +27,10 @@ export default function TabLayout() {
       />
       {/* Settings Tab */}
       <Tabs.Screen
-        name="settings" // This will look for a file at app/(tabs)/settings.tsx
+        name="profile" // This will look for a file at app/(tabs)/settings.tsx
         options={{
-          title: 'Settings',
-          tabBarIcon: ({ color }) => <FontAwesome size={28} name="cog" color={color} />, 
+          title: 'profile',
+          tabBarIcon: ({ color }) => <FontAwesome size={28} name='user' color={color} />, 
         }}
       />
     </Tabs>
