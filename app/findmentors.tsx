@@ -1,10 +1,14 @@
-import { View, Text, TextInput, Image } from "react-native";
+import { View, Text, TextInput, Image, ScrollView } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import CustomHeader from "@/components/CustomHeader";
 
 function FindMentorsScreen() {
   return (
-    <View className="bg-gray-100">
-      <View className='flex-row self-center items-center mt-4 p-2 bg-gray-200 w-5/6 rounded-full'>
+    <View className="flex-1 bg-white">
+        <ScrollView>
+            <CustomHeader />
+      <View className=
+                "flex-row items-center self-center bg-white rounded-full w-5/6 px-5 h-16 border border-gray-400">
         <Ionicons name='search' size={20} className='ml-2' color="black" />
         <TextInput
         placeholder='Search'
@@ -13,92 +17,119 @@ function FindMentorsScreen() {
         <Ionicons name='filter-sharp' size={20} className='ml-auto mr-4' color="black" />
       </View>
 
-      <Text style={{ fontFamily: "OpenSans-Bold" }} className='text-xl mt-4 ml-8'>
+      <Text className='font-Text text-xl mt-4 ml-8'>
         Recommended Mentors
       </Text>
-      <View className="flex-row mt-4 mx-8 gap-4">
-        <Image
-          source={{uri: "https://avatar.iran.liara.run/public/20"}}
-          style={{ width: 80, height: 80 }}
-          className="rounded-full border-2 border-gray-200"
-        />
-        <Image
-          source={{uri: "https://avatar.iran.liara.run/public/40"}}
-          style={{ width: 80, height: 80 }}
-          className="rounded-full border-2 border-gray-200"
-        />
-        <Image
-          source={{uri: "https://avatar.iran.liara.run/public/60"}}
-          style={{ width: 80, height: 80 }}
-          className="rounded-full border-2 border-gray-200"
-        />
-        <Image
-          source={{uri: "https://avatar.iran.liara.run/public/80"}}
-          style={{ width: 80, height: 80 }}
-          className="rounded-full border-2 border-gray-200"
-        />
-      </View>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                <View className="flex-row gap-5 ml-7 mt-4 mb-4">
+                    <Image
+                        source={{uri: "https://avatar.iran.liara.run/public/"}}
+                        style={{width:80,height:80,}}
+                        className="rounded-full border-2 border-gray-200"
+                    />
+                    <Image
+                        source={{uri: "https://avatar.iran.liara.run/public/"}}
+                        style={{width:80,height:80,}}
+                        className="rounded-full border-2 border-gray-200"
+                    />
+                    <Image
+                        source={{uri: "https://avatar.iran.liara.run/public/"}}
+                        style={{width:80,height:80,}}
+                        className="rounded-full border-2 border-gray-200"
+                    />
+                    <Image
+                        source={{uri: "https://avatar.iran.liara.run/public/"}}
+                        style={{width:80,height:80,}}
+                        className="rounded-full border-2 border-gray-200"
+                    />
+                    <Image
+                        source={{uri: "https://avatar.iran.liara.run/public/"}}
+                        style={{width:80,height:80,}}
+                        className="rounded-full border-2 border-gray-200"
+                    />
+                    <Image
+                        source={{uri: "https://avatar.iran.liara.run/public/"}}
+                        style={{width:80,height:80,}}
+                        className="rounded-full border-2 border-gray-300"
+                    />
 
-      <Text style={{ fontFamily: "OpenSans-Bold" }} className='text-xl mt-4 ml-8'>
+                </View>
+            </ScrollView>
+
+      <Text className='font-Text text-xl mt-4 ml-8'>
         Mentors Near You
       </Text>
-      <View className="flex-row mt-4 mx-8 gap-4">
-        <Image
-          source={{uri: "https://avatar.iran.liara.run/public/20"}}
-          style={{ width: 80, height: 80 }}
-          className="rounded-full border-2 border-gray-200"
-        />
-        <Image
-          source={{uri: "https://avatar.iran.liara.run/public/40"}}
-          style={{ width: 80, height: 80 }}
-          className="rounded-full border-2 border-gray-200"
-        />
-        <Image
-          source={{uri: "https://avatar.iran.liara.run/public/60"}}
-          style={{ width: 80, height: 80 }}
-          className="rounded-full border-2 border-gray-200"
-        />
-        <Image
-          source={{uri: "https://avatar.iran.liara.run/public/80"}}
-          style={{ width: 80, height: 80 }}
-          className="rounded-full border-2 border-gray-200"
-        />
-      </View>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                <View className="flex-row gap-5 ml-7 mt-4 mb-4">
+                    <Image
+                        source={{uri: "https://avatar.iran.liara.run/public/"}}
+                        style={{width:80,height:80,}}
+                        className="rounded-full border-2 border-gray-200"
+                    />
+                    <Image
+                        source={{uri: "https://avatar.iran.liara.run/public/"}}
+                        style={{width:80,height:80,}}
+                        className="rounded-full border-2 border-gray-200"
+                    />
+                    <Image
+                        source={{uri: "https://avatar.iran.liara.run/public/"}}
+                        style={{width:80,height:80,}}
+                        className="rounded-full border-2 border-gray-200"
+                    />
+                    <Image
+                        source={{uri: "https://avatar.iran.liara.run/public/"}}
+                        style={{width:80,height:80,}}
+                        className="rounded-full border-2 border-gray-200"
+                    />
+                    <Image
+                        source={{uri: "https://avatar.iran.liara.run/public/"}}
+                        style={{width:80,height:80,}}
+                        className="rounded-full border-2 border-gray-200"
+                    />
+                    <Image
+                        source={{uri: "https://avatar.iran.liara.run/public/"}}
+                        style={{width:80,height:80,}}
+                        className="rounded-full border-2 border-gray-300"
+                    />
 
-      <Text style={{ fontFamily: "OpenSans-Bold" }} className='text-xl mt-4 ml-8'>
+                </View>
+            </ScrollView>
+
+      <Text className='font-Text text-xl mt-4 ml-8'>
         Recent Projects
       </Text>
-      <View className="flex-row mt-4 mx-8 border border-gray-400 rounded-lg p-4">
+      <View className="flex-row mt-4 mx-8 border border-stone-400 rounded-lg p-4">
         <Image
           source={{uri: "https://avatar.iran.liara.run/public/57"}}
           style={{ width: 60, height: 60 }}
-          className="rounded-full border-2 border-gray-200"
+          className="rounded-full border-2 border-stone-200"
         />
-        <View className="flex-col w-72 ml-4 gap-2">
-          <Text style={{ fontFamily: "OpenSans-Bold" }}>
+        <View className="flex-col w-72 ml-4 pr-5 gap-2">
+          <Text className="font-Text">
             "This is a sample project title"
           </Text>
-          <Text style={{ fontFamily: "OpenSans-Regular" }}>
+          <Text className="font-Text">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
           </Text>
         </View>
       </View>
 
-      <View className="flex-row mt-4 mx-8 border border-gray-400 rounded-lg p-4">
+      <View className="flex-row mt-4 mx-8 border border-stone-400 rounded-lg p-4">
         <Image
           source={{uri: "https://avatar.iran.liara.run/public/74"}}
           style={{ width: 60, height: 60 }}
-          className="rounded-full border-2 border-gray-200"
+          className="rounded-full border-2 border-stone-200"
         />
-        <View className="flex-col w-72 ml-4 gap-2">
-          <Text style={{ fontFamily: "OpenSans-Bold" }}>
+        <View className="flex-col w-72 ml-4 pr-5 gap-2">
+          <Text className="font-Text">
             "This is a sample project title"
           </Text>
-          <Text style={{ fontFamily: "OpenSans-Regular" }}>
+          <Text className="font-Text">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
           </Text>
         </View>
       </View>
+      </ScrollView>
     </View>
   );
 }
