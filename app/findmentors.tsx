@@ -7,6 +7,9 @@ function FindMentorsScreen() {
     <View className="flex-1 bg-white">
         <ScrollView>
             <CustomHeader />
+            <Text className="text-3xl font-bold font-Title text-black text-center pb-4">
+                Explore Mentors
+            </Text>
       <View className=
                 "flex-row items-center self-center bg-white rounded-full w-5/6 px-5 h-16 border border-gray-400">
         <Ionicons name='search' size={20} className='ml-2' color="black" />
