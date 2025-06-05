@@ -6,6 +6,7 @@ import drawerNavigation from './drawerNavigation';
 import Notifications from './notifications';
 import Cybermatch from './cybermatch';
 import Profile from './profile';
+import Friends from './friends';
 
 const Tab = createBottomTabNavigator();
 
@@ -36,6 +37,13 @@ export default function tabsNavigation() {
             <Tab.Screen
                 name="Profile"
                 component={Profile}
+                options={{
+                    tabBarIcon: ({ color }) => <FontAwesome size={28} name="user" color={color} />,
+                }}
+            />
+            <Tab.Screen
+                name="Friends"
+                component={Friends}
                 options={{
                     tabBarIcon: ({ color }) => <FontAwesome size={28} name="user" color={color} />,
                 }}
