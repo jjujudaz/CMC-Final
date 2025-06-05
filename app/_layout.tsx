@@ -49,6 +49,7 @@ function RootLayout() {
       <Stack.Screen name="settings" options={{ title: "Settings" }} />
       <Stack.Screen name="findmentors" options={{ title: "Find Mentors" }} />
       <Stack.Screen name="cybermatch" options={{ title: "Cyber Match" }} />
+       <Stack.Screen name="chat" options={{ title: "Chat Match" }} />
     </Stack>
   );
 }
