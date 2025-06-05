@@ -10,4 +10,4 @@ export default function Chat() {
             { <Text>User Name: {}</Text>}
         </View>
     );
-}r
+}
