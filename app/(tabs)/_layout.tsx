@@ -38,7 +38,7 @@ export default function tabsNavigation() {
                 name="Profile"
                 component={Profile}
                 options={{
-                    tabBarIcon: ({ color }) => <FontAwesome size={28} name="user" color={color} />,
+                    tabBarIcon: ({ color }) => <FontAwesome size={28} name="cog" color={color} />,
                 }}
             />
             <Tab.Screen
