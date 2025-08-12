@@ -5,6 +5,7 @@ import tabsNavigation from "@/app/(tabs)/tabsNavigation";
 import home from "@/app/(tabs)/home";
 import findmentors from "@/app/findmentors";
 import settings from "@/app/settings";
+import location from "@/app/supabase/locationChecker"
 
 const Drawer = createDrawerNavigator();
 
@@ -16,6 +17,7 @@ export default function RootLayout() {
                 <Drawer.Screen name="Home Page" component={home} />
                 <Drawer.Screen name="Find Mentors" component={findmentors} />
                 <Drawer.Screen name="Settings" component={settings} />
+                <Drawer.Screen name="loc" component={location} />
             </Drawer.Navigator>
         </GestureHandlerRootView>
     );
