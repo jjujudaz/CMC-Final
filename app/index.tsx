@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { View, Text, Image } from "react-native";
 import { firebaseConfig } from "./firebase/firebse_initialize";
 import { initializeApp } from "firebase/app";
@@ -8,58 +8,72 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 export default function HomeScreen() {
+
+  const [ipAddress, setIpAddress] = useState(null);
+  const [isInAustralia, setInAustralia] = useState(null);
+
   useEffect(() => {
-    // Initialize Firebase App
-    const app = initializeApp(firebaseConfig);
+    const fetchNetworkInfo = async () => {
+      try {
+        //Get public IP
+        const ipResponse = await fetch("https://api.ipify.org?format=json");
+        const ipData = await ipResponse.json();
+        setIpAddress(ipData.ip);
+        //const testAddress = "8.8.8.8" //THIS IS A TESTING IP
 
-    // Initialize Firebase Database
-    getDatabase(app);
+        //Get location from ip-api.com
+        //If you want to use the testing IP use change "ipData.ip" to "testAddress"
+        const locationResponse = await fetch(`http://ip-api.com/json/${ipData.ip}`);
+        const locationData = await locationResponse.json();
 
-    console.log("Firebase App:" + app);
-    console.log("Database Initialized");
+        if (locationData.country === "Australia") {
+          setInAustralia(true);
+          initializeFirebaseUser();
+        } else {
+          setInAustralia(false);
+          router.replace("/accessDenied");
+        }
 
-    // REMOVE this line:
-    // setTimeout(() => {
-    //   router.push('/register');
-    // }, 2000);
+      } catch (error) {
+        console.error("Error getting network information:", error);
+        router.replace("/accessDenied"); //navigate to access denied page if unable to get netwrok info
+      }
+    };
 
-    // Initialize user on app load
-    initilizeUser();
+    fetchNetworkInfo();
   }, []);
 
-  // Function to initialize user
-  async function initilizeUser() {
+  // Firebase + user initialization
+  const initializeFirebaseUser = async () => {
+    const app = initializeApp(firebaseConfig);
+    getDatabase(app);
+    console.log("Firebase initialized");
+
     const auth = getAuth();
-    console.log("Auth Initialized");
     try {
       const userCredentials = await fetchUser();
-      if(!userCredentials) {
+
+      if (!userCredentials) {
         router.replace("/login");
+        return;
       }
-      // Check if userCredentials is valid
-      if (userCredentials && userCredentials.email && userCredentials.pwd) {
-        console.log("Received User Credentials:", userCredentials);
 
-        // Attempt to sign in the user
-        const user = await signInWithEmailAndPassword(
-          auth,
-          userCredentials.email,
-          userCredentials.pwd
-        );
+      const { email, pwd } = userCredentials;
 
+      if (email && pwd) {
+        const user = await signInWithEmailAndPassword(auth, email, pwd);
         if (user.user) {
-          console.log("User signed in successfully:", user.user.email);
+          console.log("User signed in:", user.user.email);
           router.replace("/home");
         } else {
-          console.log("No user found");
-          //later change to home
           router.replace("/login");
         }
       }
     } catch (error) {
       console.error("Error during user initialization:", error.message);
+      router.replace("/login");
     }
-  }
+  };
 
   // Function to fetch user credentials from AsyncStorage
   async function fetchUser() {
