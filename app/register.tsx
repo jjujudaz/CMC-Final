@@ -10,14 +10,13 @@ import {
   Platform,
   ActivityIndicator, // Added for loading state
 } from "react-native";
-import { app } from "./firebase/firebse_initialize"; // Assuming this initializes Firebase for other purposes if still needed
+import { app } from "./firebase/firebase_initialize"; // Assuming this initializes Firebase for other purposes if still needed
 import createUser from "./firebase/createUser";
 import { useRouter } from "expo-router";
 import * as ImagePicker from "expo-image-picker";
 import SegmentedControl from "@react-native-segmented-control/segmented-control";
 import Constants from "expo-constants";
 import AWS from "aws-sdk"; // Your AWS S3 upload logic
-import { getAuth } from "firebase/auth"; // For checking Firebase auth state if needed
 import { supabase } from "@/app/supabase/initiliaze"; // Import Supabase client
 
 export default function RegisterScreen() {
