@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { getPIN } from './storage';
 import {
     View,
     Text,
@@ -33,15 +34,23 @@ export default function LoginScreen() { // Changed component name to LoginScreen
         const result = await loginUser(email, pwd);
         console.log("Login result:", result); // Log the result for debugging
         setIsLoading(false);
-        if (result === true) { // Check for explicit true for success
-            // IMPORTANT: Do NOT pass email and password in params.
-            // The session is now managed by the Supabase client.
-            // Your /home screen or a global auth context should check Supabase for the session.
-            console.log("Login successful, navigating to home...");
-            router.replace('/home'); // Navigate to home
+
+
+        if (result === true) {
+            const pin = await getPIN();
+            if (pin) {
+                // Existing user with PIN
+                router.replace("/pin");
+            } else {
+                // Existing user without PIN
+                router.replace("/home");
+            }
         } else {
-            setMessage(result as string); // result is the error message string
+            setMessage(result as string);
         }
+
+
+
     }
 
     function navigateToRegister() {
