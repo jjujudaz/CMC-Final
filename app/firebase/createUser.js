@@ -29,7 +29,7 @@ export default async function createUser(email, password, name, photoURL, userTy
             options: {
                 data: { // Custom metadata for Supabase Auth user
                     name: name,
-                    user_type: userType == 0 ? "student" : 'tutor',
+                    user_type: userType == 0 ? "Student" : 'Tutor',
                     photo_url: photoURL, // Supabase Auth often uses snake_case for metadata
                     // firebase_uid: user.uid // Optionally store Firebase UID if needed for linking
                 }
@@ -56,7 +56,7 @@ export default async function createUser(email, password, name, photoURL, userTy
                 // For simplicity, if 'id' is auto-generated serial, this is fine.
                 name: name,
                 email: email,
-                user_type: userType == 0 ? "student" : 'tutor',
+                user_type: userType == 0 ? "Student" : 'Tutor',
                 photoURL: photoURL, // Assuming your 'users' table uses 'photoURL'
             })
             .select(); // Return the inserted data

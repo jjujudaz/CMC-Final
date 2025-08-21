@@ -13,7 +13,6 @@ import {
 // Adjust the import path if you moved loginUser.js
 import loginUser from './firebase/loginUser'; // Or your new path for the Supabase-only login function
 import { useRouter } from "expo-router";
-import { supabase } from "@/app/supabase/initiliaze"; // For potential direct use if needed
 
 export default function LoginScreen() { // Changed component name to LoginScreen for clarity
 
