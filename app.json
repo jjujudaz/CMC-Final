@@ -42,18 +42,19 @@
         }
       ],
       "expo-font",
-      "expo-web-browser"
+      "expo-web-browser",
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true
     },
     "extra": {
-        "AWS_ACCESS_KEY_ID": "",
-        "AWS_SECRET_ACCESS_KEY": "",
-        "AWS_REGION": "ap-southeast-2"
-      },
-      "eas": {
-        "projectId": "9a8d5fdf-814d-43f6-99fc-9cfb2d872d19"
-      }
+      "AWS_ACCESS_KEY_ID": "",
+      "AWS_SECRET_ACCESS_KEY": "",
+      "AWS_REGION": "ap-southeast-2"
+    },
+    "eas": {
+      "projectId": "9a8d5fdf-814d-43f6-99fc-9cfb2d872d19"
+    }
   }
 }

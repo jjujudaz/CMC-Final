@@ -7,7 +7,6 @@ import Notifications from './notifications';
 import Cybermatch from './cybermatch';
 import Profile from './profile';
 import Friends from './friends';
-import Login from '../login';
 
 const Tab = createBottomTabNavigator();
 
@@ -47,13 +46,6 @@ export default function tabsNavigation() {
                 component={Friends}
                 options={{
                     tabBarIcon: ({ color }) => <FontAwesome size={28} name="user" color={color} />,
-                }}
-            />
-            <Tab.Screen
-                name="Login"
-                component={Login}
-                options={{
-                    tabBarIcon: ({ color }) => <FontAwesome size={28} name="sign-in" color={color} />,
                 }}
             />
         </Tab.Navigator>

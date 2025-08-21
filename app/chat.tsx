@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, FlatList, KeyboardAvoidingView
 import { useLocalSearchParams } from "expo-router";
 import { supabase } from "../app/supabase/initiliaze";
 import { getDatabase, ref, push, onValue, off } from "firebase/database";
-import { firebaseConfig } from "../app/firebase/firebse_initialize"; 
+import { firebaseConfig } from "../app/firebase/firebase_initialize"; 
 import { initializeApp } from "firebase/app";
 
 type User = {
