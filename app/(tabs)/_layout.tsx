@@ -4,7 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import drawerNavigation from './drawerNavigation';
 import Notifications from './notifications';
-import Cybermatch from './cybermatch';
+import Cybermatch from '../cybermatch';
 import Profile from './profile';
 import Friends from './friends';
 
@@ -25,13 +25,6 @@ export default function tabsNavigation() {
                 component={Notifications}
                 options={{
                     tabBarIcon: ({ color }) => <FontAwesome size={28} name="bell" color={color} />,
-                }}
-            />
-            <Tab.Screen
-                name="Cybermatch"
-                component={Cybermatch}
-                options={{
-                    tabBarIcon: ({ color }) => <FontAwesome size={28} name="users" color={color} />,
                 }}
             />
             <Tab.Screen
