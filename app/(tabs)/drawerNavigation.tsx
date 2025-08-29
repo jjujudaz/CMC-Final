@@ -39,9 +39,15 @@ export default function RootLayout() {
                     },
                 }}
             >
-                <Drawer.Screen name="Home Page" component={home} />
-                <Drawer.Screen name="Cyber Match" component={CyberMatchScreen} />
-                <Drawer.Screen name="Settings" component={settings} />
+                <Drawer.Screen name="Home Page" component={home}
+                               options={{ headerShown: false }}
+                />
+                <Drawer.Screen name="Cyber Match" component={CyberMatchScreen}
+                               options={{ headerShown: false }}
+                />
+                <Drawer.Screen name="Settings" component={settings}
+                               options={{ headerShown: false }}
+                />
             </Drawer.Navigator>
         </GestureHandlerRootView>
     );

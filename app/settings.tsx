@@ -32,7 +32,7 @@ function SettingsScreen() {
     };
 
     return (
-        <View className="flex-1 bg-white">
+        <View className="flex-1 bg-white pt-10">
             <ScrollView>
                 <CustomHeader />
                 <Text className="text-3xl font-bold font-Title text-black text-center pb-4">

@@ -157,7 +157,7 @@ function NotificationsScreen() {
   }
 
   return (
-    <ScrollView className="flex-1 bg-gray-100">
+    <ScrollView className="flex-1 bg-white pt-14">
       <Text style={{ fontFamily: "OpenSans-Regular" }} className="text-2xl font-bold ml-4 mt-6 mb-4">
         {role && role.toLowerCase() === "tutor" ? "Mentorship Requests" : "Your Accepted Mentors"}
       </Text>

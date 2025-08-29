@@ -222,10 +222,11 @@ export default function RegisterScreen() {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={Platform.OS === "ios" ? 80 : 0}
+      keyboardVerticalOffset={Platform.OS  === "ios" ? 0 : 0}
       className="flex-1 bg-white"
     >
       <ScrollView
+          className="pt-36"
         contentContainerStyle={{ flexGrow: 1, paddingBottom: 50 }}
         keyboardShouldPersistTaps="handled"
       >
@@ -244,9 +245,9 @@ export default function RegisterScreen() {
         </View>
         <View className="mx-20 mb-5">
           <SegmentedControl
-            backgroundColor="#000000"
-            style={{ height: 40, borderRadius: 20 }}
-            tintColor="#3B82F6"
+            backgroundColor="#E5E7EB"
+            style={{ height: 40, borderRadius: 20}}
+            tintColor="#16519F"
             values={["Student", "Tutor"]}
             selectedIndex={userType}
             onChange={(event) =>
@@ -255,8 +256,17 @@ export default function RegisterScreen() {
             enabled={!isProcessing && !isWaitingForVerification}
           />
         </View>
-        <Text className="text-base font-bold font-Menu pl-11">Name</Text>
-        <View className="flex-row items-center bg-gray-200 mx-10 px-4 rounded-lg h-14 mb-10">
+        <Text className="text-base font-bold font-Menu text-gray-700 mb-1 pl-11">Name</Text>
+        <View className="flex-row
+        items-center
+        bg-gray-100
+        border
+        border-gray-300
+        mx-10
+        px-4
+        rounded-lg
+        h-14
+        mb-10">
           <TextInput
             className="flex-1 text-base font-Text text-gray-800"
             placeholder="Full Name"
@@ -264,8 +274,17 @@ export default function RegisterScreen() {
             editable={!isProcessing && !isWaitingForVerification}
           />
         </View>
-        <Text className="text-base font-bold font-Menu pl-11">Email</Text>
-        <View className="flex-row items-center bg-gray-200 mx-10 px-4 rounded-lg h-14 mb-10">
+        <Text className="text-base font-bold font-Menu text-gray-700 mb-1 pl-11">Email</Text>
+        <View className="flex-row
+        items-center
+        bg-gray-100
+        border
+        border-gray-300
+        mx-10
+        px-4
+        rounded-lg
+        h-14
+        mb-10">
           <TextInput
             className="flex-1 text-base font-Text text-gray-800"
             placeholder="someone@example.com"
@@ -275,8 +294,17 @@ export default function RegisterScreen() {
             editable={!isProcessing && !isWaitingForVerification}
           />
         </View>
-        <Text className="text-base font-bold font-Menu pl-11">Password</Text>
-        <View className="flex-row items-center bg-gray-200 mx-10 px-4 rounded-lg h-14 mb-10">
+        <Text className="text-base font-bold font-Menu text-gray-700 mb-1 pl-11">Password</Text>
+        <View className="flex-row
+        items-center
+        bg-gray-100
+        border
+        border-gray-300
+        mx-10
+        px-4
+        rounded-lg
+        h-14
+        mb-10">
           <TextInput
             className="flex-1 text-base font-Text text-gray-800"
             placeholder="Password (min. 6 characters)"

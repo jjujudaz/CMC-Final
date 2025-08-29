@@ -1,5 +1,5 @@
 
-import FontAwesome from '@expo/vector-icons/FontAwesome';
+import Feather from '@expo/vector-icons/Feather';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import drawerNavigation from './drawerNavigation';
@@ -17,30 +17,35 @@ export default function tabsNavigation() {
                 name="Home"
                 component={drawerNavigation}
                 options={{
-                    tabBarIcon: ({ color }) => <FontAwesome size={28} name="home" color={color} />,
+                    headerShown: false,
+                    tabBarIcon: ({ color }) => <Feather size={28} name="home" color={color} />,
                 }}
             />
             <Tab.Screen
                 name="Notifications"
                 component={Notifications}
                 options={{
-                    tabBarIcon: ({ color }) => <FontAwesome size={28} name="bell" color={color} />,
-                }}
-            />
-            <Tab.Screen
-                name="Profile"
-                component={Profile}
-                options={{
-                    tabBarIcon: ({ color }) => <FontAwesome size={28} name="cog" color={color} />,
+                    headerShown:false,
+                    tabBarIcon: ({ color }) => <Feather size={28} name="inbox" color={color} />,
                 }}
             />
             <Tab.Screen
                 name="Friends"
                 component={Friends}
                 options={{
-                    tabBarIcon: ({ color }) => <FontAwesome size={28} name="user" color={color} />,
+                    headerShown:false,
+                    tabBarIcon: ({ color }) => <Feather size={28} name="coffee" color={color} />,
                 }}
             />
+            <Tab.Screen
+                name="Profile"
+                component={Profile}
+                options={{
+                    headerShown:false,
+                    tabBarIcon: ({ color }) => <Feather size={28} name="user" color={color} />,
+                }}
+            />
+
         </Tab.Navigator>
     );
 }

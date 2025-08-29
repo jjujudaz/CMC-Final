@@ -125,7 +125,7 @@ function HomeScreen() {
   }
 
   return (
-    <View className=" flex-1 bg-white">
+    <View className=" flex-1 bg-white pt-10">
       <ScrollView
         className="flex-1"
         showsVerticalScrollIndicator={false}

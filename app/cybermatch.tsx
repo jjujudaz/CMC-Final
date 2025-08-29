@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { View, Text, Image, TouchableOpacity, Alert, ScrollView, ActivityIndicator } from "react-native";
 import { supabase } from "./supabase/initiliaze";
+import CustomHeader from "@/components/CustomHeader";
 
 // Add these debugging utilities at the top
 const DEBUG = true; // Set to false in production
@@ -403,7 +404,8 @@ function CyberMatchScreen() {
 
   debugLog('🎯 Rendering main interface');
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: '#F9FAFB' }} contentContainerStyle={{ paddingVertical: 20 }}>
+    <ScrollView className="flex-1 bg-white pt-10">
+      <CustomHeader />
       <View style={{ paddingHorizontal: 16 }}>
         {!matching ? (
           <View style={{ alignItems: 'center' }}>

@@ -37,20 +37,21 @@ function RootLayout() {
         options={{
           headerBackVisible: false, // No back button on tabs
           headerTitle: '',          // No static title, let tabs set their own
+            headerShown: false
         }}
       />
 
       {/* Other stack screens outside the tab navigator */}
-      <Stack.Screen name="register" options={{ title: "Register" }} />
-      <Stack.Screen name="home" options={{ title: "Home" }} />
-      <Stack.Screen name="login" options={{ title: "Login" }} />
-      <Stack.Screen name="pin" options={{ title: "Enter PIN" }} />
-      <Stack.Screen name="profile" options={{ title: "Profile" }} />
-      <Stack.Screen name="notifications" options={{ title: "Notifications" }} />
-      <Stack.Screen name="settings" options={{ title: "Settings" }} />
-      <Stack.Screen name="findmentors" options={{ title: "Find Mentors" }} />
-      <Stack.Screen name="cybermatch" options={{ title: "Cyber Match" }} />
-      <Stack.Screen name="chat" options={{ title: "Chat Match" }} />
+      <Stack.Screen name="register" options={{ title: "Register", headerShown: false }} />
+      <Stack.Screen name="home" options={{ title: "Home", headerShown: false }} />
+      <Stack.Screen name="login" options={{ title: "Login", headerShown: false }} />
+      <Stack.Screen name="pin" options={{ title: "Enter PIN", headerShown: false }} />
+      <Stack.Screen name="profile" options={{ title: "Profile", headerShown: false }} />
+      <Stack.Screen name="notifications" options={{ title: "Notifications", headerShown: false }} />
+      <Stack.Screen name="settings" options={{ title: "Settings", headerShown: false }} />
+      <Stack.Screen name="findmentors" options={{ title: "Find Mentors", headerShown: false }} />
+      <Stack.Screen name="cybermatch" options={{ title: "Cyber Match", headerShown: false }} />
+      <Stack.Screen name="chat" options={{ title: "Chat Match", headerShown: false }} />
     </Stack>
   );
 }

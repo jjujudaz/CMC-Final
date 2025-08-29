@@ -60,7 +60,7 @@ export default function LoginScreen() { // Changed component name to LoginScreen
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
-            keyboardVerticalOffset={Platform.OS === "ios" ? 80 : 0}
+            keyboardVerticalOffset={Platform.OS  === "ios" ? 0 : 0}
             className="flex-1 bg-white"
         >
             <ScrollView

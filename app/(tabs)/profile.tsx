@@ -79,7 +79,7 @@ export default function ProfileScreen() {
   };
 
   return (
-    <ScrollView className="flex-1 bg-white">
+    <ScrollView className="flex-1 bg-white pt-10">
       <View className='pt-4 pb-8'>
         {loading ? (
           <ActivityIndicator className="mt-8" />
