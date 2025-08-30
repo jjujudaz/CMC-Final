@@ -248,12 +248,14 @@ export default function RegisterScreen() {
             backgroundColor="#E5E7EB"
             style={{ height: 40, borderRadius: 20}}
             tintColor="#16519F"
-            values={["Student", "Tutor"]}
+            values={["Student", "Mentor"]}
             selectedIndex={userType}
             onChange={(event) =>
               setUsertype(event.nativeEvent.selectedSegmentIndex)
             }
             enabled={!isProcessing && !isWaitingForVerification}
+            fontStyle={{ color: "white" }}          
+            activeFontStyle={{ color: "white" }}
           />
         </View>
         <Text className="text-base font-bold font-Menu text-gray-700 mb-1 pl-11">Name</Text>

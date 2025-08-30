@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, TextInput, Button, ScrollView, Image } from "react-native";
 import { getAuth } from "firebase/auth";
 import {
@@ -22,10 +22,12 @@ function HomeScreen() {
   const [messages, setMessages] = useState([]);
   const [photoUrl, setPhotoUrl] = useState(null);
   const [tutors, setTutors] = useState([]);
+  const [mentors, setMentors] = useState([]);
+  const [loadingMentors, setLoadingMentors] = useState(false);
   useEffect(() => {
     fetchUser();
     initializeUser();
-    finitializeSupabase();
+    fetchMentors();
   }, []);
 
   async function initializeUser() {
@@ -61,7 +63,7 @@ function HomeScreen() {
       console.log(auth.currentUser.photoURL);
     }
   }
-
+/*
   async function finitializeSupabase() {
     try {
       const { data, error } = await supabase.from("users").select("*");
@@ -77,6 +79,38 @@ function HomeScreen() {
   }
   useEffect(() => {
     fetchData();
+  }, []);
+ */
+
+  async function fetchMentors() {
+    try {
+      const { data, error } = await supabase.from("mentors").select("*");
+
+      if (error) {
+        console.error("Error fetching mentors:", error.message);
+        return [];
+      }
+
+      if (data) {
+        const shuffledMentors = data.sort(() => 0.5 - Math.random()); //shuffle select 5 mentors
+        return shuffledMentors.slice(0, 5);
+      }
+      return [];
+    } catch (error) {
+      console.error("Supabase fetch error:", error);
+      return [];
+    }
+  }
+
+  useEffect(() => {
+    const loadMentors = async () => {
+      setLoadingMentors(true);
+      const mentorData = await fetchMentors();
+      setMentors(mentorData);
+      setLoadingMentors(false);
+    };
+
+    loadMentors();
   }, []);
 
   async function fetchData() {
@@ -163,18 +197,6 @@ function HomeScreen() {
             <Feather name="filter" size={24} color="black" />
           </View>
         </View>
-          {/*
-          <Button onPress={sendMessage} title="Send" />
-            {messages.map((item, index) => {
-              return (
-                <View key={index}>
-                  <Text>
-                    {item.userName}: {item.message}
-                  </Text>
-                </View>
-              );
-            })}
-          */}
 
           <Text className={"text-lg font-extrabold font-Menu ml-7 mb-4"}>
             Recent Updates
@@ -217,60 +239,62 @@ function HomeScreen() {
             </View>
           </ScrollView>
 
-          <Text className={"text-lg font-extrabold font-Menu ml-7 mb-4"}>
-            Recommended
-          </Text>
-          {tutors.map((item, index) => {
-            return (
-              <View
-                key={index}
-                className="bg-white rounded-xl mb-4 mx-7 border border-stone-400"
-              >
-                <View
-                className="flex-row"
-                >
-                {item.photoURL && (
-                  <Image
-                    source={{ uri: item.photoURL }}
-                    className="h-14 w-14 rounded-full m-2"
+        <Text className="text-lg font-extrabold font-Menu ml-7 mb-4 ">
+          Recommended Mentors
+        </Text>
 
-                  />
-                )}
+        {loadingMentors ? (
+            <Text className="ml-7 text-gray-500">Loading mentors...</Text>
+        ) : (
+            mentors.map((mentor, index) => (
+                <View key={index} className="bg-white rounded-xl mb-4 mx-7 border border-stone-400 p-4">
+                  <View className="flex-row items-center">
+                    {mentor.photoURL ? (
+                        <Image
+                            source={{ uri: mentor.photoURL }}
+                            className="h-14 w-14 rounded-full mr-4 border-stone-400"
+                        />
+                    ) : (
+                        <View className="h-14 w-14 rounded-full bg-gray-300 mr-4 items-center justify-center">
+                      <Ionicons name="person" size={30} color="white"/>
+                        </View>
+                    )}
 
-                <View
-                className=" flex-1 bg-stone-200 m-2 rounded-lg items-center"
-                >
-                  <Text
-                  className="font-Menu font-semibold text-black p-3"
-                  >
-                    "This is a sample bio"
-                  </Text>
-                  <Text
-                      className="font-Text font-normal text-gray-700 pr-3 pl-3"
-                  >
-                    {item.bio}
-                  </Text>
+                    <View className="flex-1">
+                      <Text className="font-Menu font-bold text-black text-lg">
+                        {mentor.name || "Unkown User"}
+                      </Text>
+
+                      {/* Display skills, specialised roles, and experience */}
+                      {mentor.skills && (
+                          <Text className="font-Text mt-1">
+                            <Text className="font-medium text-gray-700">Skills: </Text>
+                            <Text className="font-normal text-gray-700">{mentor.skills.join(", ")}</Text>
+                          </Text>
+                      )}
+                      {mentor.specialization_roles && (
+                          <Text className="font-Text mt-1">
+                            <Text className="font-medium text-gray-700">Specialised Roles: </Text>
+                            <Text className="font-normal text-gray-700">{mentor.specialization_roles.join(", ")}</Text>
+                          </Text>
+                      )}
+                      {mentor.experience_level && (
+                          <Text className="font-Text mt-1">
+                            <Text className="font-medium text-gray-700">Experience Level: </Text>
+                            <Text className="font-normal text-gray-700">{mentor.experience_level}</Text>
+                          </Text>
+                      )}
+
+                      <Text className="text-[14px] font-Menu font-light text-gray-500 mt-1">
+                        Mentor since: {mentor.created_at ? new Date(mentor.created_at).toLocaleDateString() : "N/A"}
+                      </Text>
+                    </View>
+                  </View>
                 </View>
-                </View>
+            ))
+        )}
 
 
-                <View
-                className="flex-1 justify-end ml-20"
-                >
-                  <Text
-                    className={
-                      "text-xl font-medium font-Title text-gray-800"
-                    }
-                  >
-                    {item.name}
-                  </Text>
-                  <Text className={"text-[14px] font-Menu font-light text-gray-700 mb-1.5"}>
-                    Tutor since: {new Date(item.created_at).toLocaleDateString()}
-                  </Text>
-                </View>
-              </View>
-            );
-          })}
 
       </ScrollView>
     </View>
