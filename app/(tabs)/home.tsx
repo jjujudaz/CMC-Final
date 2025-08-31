@@ -9,12 +9,16 @@ import {
   push,
   child,
 } from "firebase/database";
+import {useRouter} from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import UserInfo from "../firebase/getUserInfo";
 import { supabase } from "@/app/supabase/initiliaze";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Feather from '@expo/vector-icons/Feather';
 import CustomHeader from "@/components/CustomHeader";
+import SearchBar from "@/components/SearchBar";
+import { useNavigation } from "@react-navigation/native";
+
 
 function HomeScreen() {
   const [welcomeMessage, setWelcomeMessage] = useState<String>("");
@@ -24,6 +28,9 @@ function HomeScreen() {
   const [tutors, setTutors] = useState([]);
   const [mentors, setMentors] = useState([]);
   const [loadingMentors, setLoadingMentors] = useState(false);
+  const router = useRouter();
+  const navigation = useNavigation();
+
   useEffect(() => {
     fetchUser();
     initializeUser();
@@ -179,24 +186,12 @@ function HomeScreen() {
         ) : (
           ""
         )}
-        <View className={"flex-1 mt-4 mx-8 mb-5"}>
-          <View
-            className={
-              "flex-row items-center bg-white rounded-full px-5 h-16 border border-gray-400"
-            }
-          >
-            <Ionicons name="search-outline" size={24} color="black" />
 
-            <TextInput
-                value={textMessage}
-                onChangeText={(msg) => setTextMessage(msg)}
-                placeholder="Search for a mentor..."
-                className="flex-1 ml-1.5 font-Text text-lg font-normal text-gray-800"
-                textAlignVertical="center"
-            />
-            <Feather name="filter" size={24} color="black" />
-          </View>
-        </View>
+        <SearchBar
+            onPress={() => navigation.navigate("Explore")}
+            onChangeText={() => navigation.navigate("Explore")}
+            placeholder="Search for a mentor..."
+        />
 
           <Text className={"text-lg font-extrabold font-Menu ml-7 mb-4"}>
             Recent Updates
@@ -262,7 +257,7 @@ function HomeScreen() {
 
                     <View className="flex-1">
                       <Text className="font-Menu font-bold text-black text-lg">
-                        {mentor.name || "Unkown User"}
+                        {mentor.name || "Unknown User"}
                       </Text>
 
                       {/* Display skills, specialised roles, and experience */}

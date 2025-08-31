@@ -254,7 +254,7 @@ export default function RegisterScreen() {
               setUsertype(event.nativeEvent.selectedSegmentIndex)
             }
             enabled={!isProcessing && !isWaitingForVerification}
-            fontStyle={{ color: "white" }}          
+            fontStyle={{ color: "white" }}
             activeFontStyle={{ color: "white" }}
           />
         </View>

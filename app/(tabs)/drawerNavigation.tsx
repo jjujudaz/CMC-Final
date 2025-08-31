@@ -42,6 +42,9 @@ export default function RootLayout() {
                 <Drawer.Screen name="Home Page" component={home}
                                options={{ headerShown: false }}
                 />
+                <Drawer.Screen name="Explore" component={findmentors}
+                               options={{ headerShown: false }}
+                />
                 <Drawer.Screen name="Cyber Match" component={CyberMatchScreen}
                                options={{ headerShown: false }}
                 />
