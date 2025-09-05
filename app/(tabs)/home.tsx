@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TextInput, Button, ScrollView, Image } from "react-native";
+import {View, Text, TextInput, Button, ScrollView, Image, TouchableOpacity} from "react-native";
 import { getAuth } from "firebase/auth";
 import {
   getDatabase,
@@ -186,12 +186,20 @@ function HomeScreen() {
         ) : (
           ""
         )}
+        <View className={"flex-1 mt-4 mx-8 mb-5"}>
+          <TouchableOpacity
+              className=
+                "flex-row items-center bg-white rounded-full px-5 h-16 border border-gray-400"
+              onPress={() => navigation.navigate("Explore")}
+          >
+            <Ionicons name="search-outline" size={24} color="black" />
 
-        <SearchBar
-            onPress={() => navigation.navigate("Explore")}
-            onChangeText={() => navigation.navigate("Explore")}
-            placeholder="Search for a mentor..."
-        />
+            <Text
+                className="flex-1 ml-2 font-Text text-lg font-normal text-gray-600">
+              "Search for a mentor..."
+            </Text>
+          </TouchableOpacity>
+        </View>
 
           <Text className={"text-lg font-extrabold font-Menu ml-7 mb-4"}>
             Recent Updates

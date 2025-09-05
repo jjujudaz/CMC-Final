@@ -1,5 +1,6 @@
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import Feather from '@expo/vector-icons/Feather';
 import { View, Text } from "react-native";
 import _layout from "@/app/_layout";
 import home from "@/app/(tabs)/home";
@@ -25,6 +26,7 @@ export default function RootLayout() {
                         shadowRadius: 8,
                         elevation: 4,
                     },
+                    overlayColor: "rgba(211, 211, 211, 0.35)",
                     drawerActiveTintColor: "#2563eb",
                     drawerInactiveTintColor: "#222",
                     drawerActiveBackgroundColor: "#e0e7ff",
@@ -40,16 +42,38 @@ export default function RootLayout() {
                 }}
             >
                 <Drawer.Screen name="Home Page" component={home}
-                               options={{ headerShown: false }}
+                               options={{ headerShown: false,
+                                   drawerActiveBackgroundColor: "#fbeaea",
+                                   drawerActiveTintColor: "#f07e74",
+                                   drawerIcon: ({ color, size }) => (
+                                       <Feather name="home" size={size} color={color} />),
+
+                }}
                 />
                 <Drawer.Screen name="Explore" component={findmentors}
-                               options={{ headerShown: false }}
+                               options={{ headerShown: false,
+                                   drawerActiveBackgroundColor: "#fbeaea",
+                                   drawerActiveTintColor: "#f07e74",
+                                   drawerIcon: ({ color, size }) => (
+                                       <Feather name="search" size={24} color={color} />),
+
+                               }}
                 />
                 <Drawer.Screen name="Cyber Match" component={CyberMatchScreen}
-                               options={{ headerShown: false }}
+                               options={{ headerShown: false,
+                                   drawerActiveBackgroundColor: "#fbeaea",
+                                   drawerActiveTintColor: "#f07e74",
+                                   drawerIcon: ({ color, size }) => (
+                                       <Feather name="shield" size={24} color={color} />),
+                               }}
                 />
                 <Drawer.Screen name="Settings" component={settings}
-                               options={{ headerShown: false }}
+                               options={{ headerShown: false,
+                                   drawerActiveBackgroundColor: "#fbeaea",
+                                   drawerActiveTintColor: "#f07e74",
+                                   drawerIcon: ({ color, size }) => (
+                                       <Feather name="settings" size={24} color={color} />),
+                               }}
                 />
             </Drawer.Navigator>
         </GestureHandlerRootView>

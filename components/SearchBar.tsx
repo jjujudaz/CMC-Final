@@ -21,7 +21,7 @@ const SearchBar = ({placeholder, onPress, value, onChangeText}:Props) => {
                 <Ionicons name="search-outline" size={24} color="black" />
 
                 <TextInput
-                    className="flex-1 ml-1.5 font-Text text-lg font-normal text-gray-800"
+                    className="flex-1 ml-2 font-Text text-lg font-normal text-gray-800"
                     textAlignVertical="center"
                     onPress={onPress}
                     placeholder={placeholder}
@@ -30,7 +30,6 @@ const SearchBar = ({placeholder, onPress, value, onChangeText}:Props) => {
 
 
                 />
-                <Feather name="filter" size={24} color="black" />
             </View>
         </View>
 
