@@ -3,7 +3,7 @@ import Feather from '@expo/vector-icons/Feather';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import drawerNavigation from './drawerNavigation';
-import Notifications from './notifications';
+import Notifications from '../notifications';
 import Cybermatch from '../cybermatch';
 import Profile from './profile';
 import Friends from './friends';
